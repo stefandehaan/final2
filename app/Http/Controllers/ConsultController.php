@@ -16,7 +16,7 @@ class ConsultController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role_or_permission:admin|doctor|insurance|consult-list');
+        $this->middleware('role_or_permission:admin|doctor|consult-list');
         $this->middleware('role_or_permission:admin|doctor|consult-create', ['only' => ['create', 'store', 'createInfo']]);
         $this->middleware('role_or_permission:admin|doctor|consult-edit', ['only' => ['edit', 'update']]);
         $this->middleware('role_or_permission:admin|doctor|consult-delete', ['only' => ['destroy']]);
@@ -104,7 +104,7 @@ class ConsultController extends Controller
     public
     function show(Consult $consult)
     {
-        return view('consults.show',compact('consult'));
+        return view('consults.show', compact('consult'));
     }
 
     /**
@@ -171,8 +171,8 @@ class ConsultController extends Controller
     public
     function destroy(Consult $consult)
     {
-       $consult->delete();
+        $consult->delete();
         return redirect()->route('consults.index')
-            ->with('success','User deleted successfully');
+            ->with('success', 'User deleted successfully');
     }
 }

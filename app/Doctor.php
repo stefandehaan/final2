@@ -23,6 +23,11 @@ class Doctor extends Model
     }
 
 
+    public function getDoctor()
+    {
+        return $this->hasOne(User::class, 'id', 'id');
+    }
+
     public function Treatments()
     {
         return $this->hasMany('App\Treatments', 'specialist');

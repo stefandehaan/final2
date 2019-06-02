@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Blood_type;
 use App\Client;
 use App\ClientInfo;
 use App\Disease;
+use App\Doctor;
 use App\Insurer;
 use App\Receipt;
 use App\TreatmentInfo;
 use App\Treatments;
+use App\User;
 use HieuLe\Alert\Facades\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,16 +38,16 @@ class ClientController extends Controller
 
 
         $clients = Client::all()->where('insurance_id', '=', auth()->user()->id);
-//        dd($clients);
         return view('clients.index', compact('clients'));
     }
 
     public function show($id)
     {
+//        dd($id);
 //        $user = ClientInfo::where(['bsn' => $bsn, 'doctor' => Auth::user()->id])->firstOrFail()->getClient;
 //        $info = ClientInfo::where(['bsn' => $bsn, 'doctor' => Auth::user()->id])->first();
-        $user = ClientInfo::where(['id' => $id])->first()->getClient;
-        $info = ClientInfo::where(['id' => $id])->first();
+        $user = Client::where(['client_id' => $id])->first()->getClient;
+        $info = Client::where(['client_id' => $id])->first();
         $diseases = Disease::all()->pluck('name', 'id');
 
         return view('clients.show', compact('user', 'info', 'diseases'));
@@ -52,27 +55,50 @@ class ClientController extends Controller
 
     public function edit($id)
     {
-        $user = ClientInfo::where(['bsn' => $id])->first()->getClient;
-        $info = ClientInfo::where(['bsn' => $id])->first();
+        $user = Client::find($id);
 
-        return view('client.edit', compact('user', 'info'));
+        $doctors = Doctor::all()->where('user_role', '4')->pluck('email', 'id');
+        $insurers = Insurer::pluck('email', 'user_id');
+        $bloodtypes = Blood_type::pluck('blood_type', 'id');
+
+        return view('clients.edit', compact('user', 'doctors', 'insurers', 'bloodtypes'));
     }
 
     public function update(Request $request, $id)
     {
-        if (empty($request['password'])) {
-            $data = $request->except('password');
-        }
-        else {
-            $data = $request->all();
-            $data['password'] = Hash::make($data['password']);
-        }
-        $client = ClientInfo::where(['id' => $id])->first()->getClient;
-        $client->update($data);
+        $request->validate([
+            'client_id' => 'required',
+            'doctor_id' => 'required',
+            'insurance_id' => 'required',
+            'blood_type' => 'required',
+            'phone' => 'required',
+            'birth' => 'required',
+            'address' => 'required',
+            'zip' => 'required',
+            'bsn' => 'required',
+
+        ]);
 
 
-        return redirect()->route('edit.client', $id);
+        $info = Client::find($id);
+        $input = $request->all();
+
+
+
+
+        $info->update($input);
+
+        return redirect()->route('clients.index')
+            ->with('success', 'client updated successfully');
     }
+
+    public function destroy($id)
+    {
+        Client::find($id)->delete();
+        return redirect()->route('clients.index')
+            ->with('success', 'User deleted successfully');
+    }
+
 
     public function history()
     {

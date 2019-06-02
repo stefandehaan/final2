@@ -75,14 +75,14 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
+            'user_role',
             'roles' => 'required'
         ]);
 
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
-
-
+        
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
 
@@ -90,6 +90,9 @@ class UserController extends Controller
         if ($user->hasRole('client')) {
             return redirect()->route('create.info.client', $user->id);
         }
+        if ($user->hasRole('doctor')) {
+           DB::update('update users set user_role = 4 where id = ?', [$user->id]);
+                   }
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully');
@@ -133,13 +136,7 @@ class UserController extends Controller
         return view('users.edit', compact('user', 'roles', 'userRole'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $this->validate($request, [

@@ -17,7 +17,7 @@ class Client extends Model
         return $this->hasOne(User::class, 'id', 'client_id');
     }
 
-    public function doctorGet()
+    public function getDoctor()
     {
         return $this->hasOne(User::class, 'id', 'doctor_id');
     }

@@ -132,7 +132,7 @@
 
 		<div class="content">
 			<main class="py-4">
-				<div class="container">
+				<div class="container-fluid">
 					@yield('content')
 				</div>
 			</main>
