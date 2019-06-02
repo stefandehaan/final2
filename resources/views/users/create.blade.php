@@ -24,6 +24,12 @@
 			</ul>
 		</div>
 	@endif
+	@if ($message = Session::get('success'))
+		<div class="alert alert-success">
+			<p>{{ $message }}</p>
+		</div>
+		<br>
+	@endif
 
 
 
@@ -53,14 +59,6 @@
 				{!! Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control')) !!}
 			</div>
 		</div>
-{{--		<div class="col-xs-12 col-sm-12 col-md-12">--}}
-{{--			<div class="form-group">--}}
-{{--				<strong>Group:</strong>--}}
-{{--				{!! Form::text('group', null, array('placeholder' => 'group','class' => 'form-control')) !!}--}}
-{{--			</div>--}}
-{{--		</div>--}}
-
-
 		<div class="col-xs-12 col-sm-12 col-md-12">
 			<div class="form-group">
 				<strong>Role:</strong>

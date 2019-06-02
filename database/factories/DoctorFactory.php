@@ -2,10 +2,10 @@
 
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
-use App\Insurer;
+use App\Doctor;
 use Faker\Generator as Faker;
 
-$factory->define(Insurer::class, function (Faker $faker) {
+$factory->define(Doctor::class, function (Faker $faker) {
     return [
         //
     ];

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\Consult;
-use App\Insurers;
+use App\Insurer;
 use App\User;
 
 class HomeController extends Controller
@@ -32,7 +32,7 @@ class HomeController extends Controller
             $client = Client::all()->where('client_id', '=', auth()->user()->id);
             $insurance = User::all()->where('id', '=', $client->first()->insurance_id);
 
-            $insurance_info = Insurers::all()->where('user_id', '=', $client->first()->insurance_id);
+            $insurance_info = Insurer::all()->where('user_id', '=', $client->first()->insurance_id);
         }
 
         if (auth()->user()->hasRole('admin')) {
@@ -41,7 +41,47 @@ class HomeController extends Controller
             $client = Client::all();
             $insurance = User::all();
 
-            $insurance_info = Insurers::all();
+            $insurance_info = Insurer::all();
+        }
+        if (auth()->user()->hasRole('insurance')) {
+            $consult = Consult::all();
+
+            $client = Client::all();
+            $insurance = User::all();
+
+            $insurance_info = Insurer::all();
+        }
+        if (auth()->user()->hasRole('doctor')) {
+            $consult = Consult::all();
+
+            $client = Client::all();
+            $insurance = User::all();
+
+            $insurance_info = Insurer::all();
+        }
+        if (auth()->user()->hasRole('pharmacy')) {
+            $consult = Consult::all();
+
+            $client = Client::all();
+            $insurance = User::all();
+
+            $insurance_info = Insurer::all();
+        }
+        if (auth()->user()->hasRole('hospital')) {
+            $consult = Consult::all();
+
+            $client = Client::all();
+            $insurance = User::all();
+
+            $insurance_info = Insurer::all();
+        }
+        if (auth()->user()->hasRole('specialist')) {
+            $consult = Consult::all();
+
+            $client = Client::all();
+            $insurance = User::all();
+
+            $insurance_info = Insurer::all();
         }
 
 

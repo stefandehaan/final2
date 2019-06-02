@@ -24,7 +24,9 @@
 			</ul>
 		</div>
 	@endif
+{{--{!! Form::open(['route' => 'store.info.client', $user->id, 'method' => 'post']) !!}--}}
 
+{{--{!! Form::close() !!}--}}
 	{!! Form::open(['route' => ['store.info.client', $user->id]]) !!}
 	{{--	{!! Form::open((route('store.info.client', $user->id))) !!}--}}
 
@@ -32,20 +34,20 @@
 		<div class="col-xs-12 col-sm-12 col-md-6">
 			<div class="form-group">
 				<strong>Name:</strong>
-				{!! Form::text('client',$user->name, ['class' => 'form-control']) !!}
+				{!! Form::text('client_id',$user->name, ['class' => 'form-control']) !!}
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-6">
 			<div class="form-group">
 				<strong>Doctor:</strong>
-				{!! Form::select('doctor', $doctors->toArray(),null , ['placeholder' => 'Kies een doctor', 'class' => 'form-control']) !!}
+				{!! Form::select('doctor_id', $doctors->toArray(),null , ['placeholder' => 'Kies een doctor', 'class' => 'form-control']) !!}
 			</div>
 		</div>
 
 		<div class="col-xs-12 col-sm-12 col-md-6">
 			<div class="form-group">
 				<strong>Verzekeraar:</strong>
-				{!! Form::select('insurance',  $insurers->toArray(),null , ['placeholder' => 'Kies een Verzekeraar', 'class' => 'form-control']) !!}
+				{!! Form::select('insurance_id',  $insurers->toArray(),null , ['placeholder' => 'Kies een Verzekeraar', 'class' => 'form-control']) !!}
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-6">
@@ -64,7 +66,7 @@
 		<div class="col-xs-12 col-sm-12 col-md-6">
 			<div class="form-group">
 				<strong>Geboortedatum:</strong>
-				{!! Form::date('age', date('Y-m-d'), ['class' => 'form-control'])  !!}
+				{!! Form::date('birth', date('Y-m-d'), ['class' => 'form-control'])  !!}
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-6">
@@ -82,7 +84,7 @@
 		<div class="col-xs-12 col-sm-12 col-md-6">
 			<div class="form-group">
 				<strong>Gender:</strong>
-				{!! Form::select('gender', ['m', 'v'] , null , ['class' => 'form-control']) !!}
+				{!! Form::select('gender', ['male', 'female'] , null , ['class' => 'form-control']) !!}
 			</div>
 		</div>
 

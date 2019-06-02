@@ -66,8 +66,9 @@
 		@endforeach
 	</table>
 
-
+@role('admin')
 	{!! $data->render() !!}
+@endrole
 
 
 @endsection

@@ -95,7 +95,7 @@
 				<a href="{{ route('users.index') }}">Users</a>
 				<a href="{{ route('consults.index') }}">Consulten</a>
 				<a href="{{ route('roles.index') }}">Rollen</a>
-				<a href="#about">Clienten</a>
+				<a href="{{ route('clients.index') }}">Clienten</a>
 				<a href="#about">Clienten</a>
 				<a href="#about">Clienten</a>
 				@guest

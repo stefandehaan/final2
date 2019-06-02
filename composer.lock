@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6571c1a73e1cd097ab0381d8c03fdca9",
+    "content-hash": "eb3602c12513e7b6f13ade7160cc8d2b",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -370,6 +370,57 @@
                 "trusted proxy"
             ],
             "time": "2019-01-10T14:06:47+00:00"
+        },
+        {
+            "name": "hieu-le/laravel-alert",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/letrunghieu/laravel-alert.git",
+                "reference": "3122958ac072e6ecc770b5c166f9e238a300c8b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/letrunghieu/laravel-alert/zipball/3122958ac072e6ecc770b5c166f9e238a300c8b7",
+                "reference": "3122958ac072e6ecc770b5c166f9e238a300c8b7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "^5.0",
+                "illuminate/session": "^5.0",
+                "illuminate/support": "^5.0",
+                "illuminate/view": "^5.0",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^3.0",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HieuLe\\Alert\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hieu Le",
+                    "email": "letrunghieu.cse09@gmail.com"
+                }
+            ],
+            "description": "Laravel global site message system",
+            "keywords": [
+                "alert",
+                "bootstrap",
+                "global",
+                "laravel",
+                "message"
+            ],
+            "time": "2017-08-24T08:32:41+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",

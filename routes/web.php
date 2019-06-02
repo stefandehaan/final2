@@ -24,4 +24,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('diseases', 'DiseaseController');
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
     Route::resource('clients', 'ClientController');
+
+    Route::get('/user/info/{id}', 'UserController@createInfo')
+        ->name('create.info.client');
+    Route::post('/user/info/{id}', 'UserController@storeInfo')
+        ->name('store.info.client');
 });
