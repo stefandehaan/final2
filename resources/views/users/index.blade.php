@@ -13,7 +13,10 @@
 		</div>
 	</div>
 
+	
 	<br>
+	
+	{!! Form::label('total users', 'Total users: '. $data->count(), ['class' => 'control-label']) !!}
 	@if ($message = Session::get('success'))
 		<div class="alert alert-success">
 			<p>{{ $message }}</p>
@@ -24,7 +27,7 @@
 
 	<table class="table table-bordered">
 		<tr>
-			<th>No</th>
+
 			<th>Name</th>
 			<th>Email</th>
 			<th>Roles</th>
@@ -32,7 +35,7 @@
 		</tr>
 		@foreach ($data as $key => $user)
 			<tr>
-				<td>{{ ++$i }}</td>
+				
 				<td>{{ $user->name }}</td>
 				<td>{{ $user->email }}</td>
 				<td>
@@ -66,9 +69,6 @@
 		@endforeach
 	</table>
 
-@role('admin')
-	{!! $data->render() !!}
-@endrole
 
 
 @endsection

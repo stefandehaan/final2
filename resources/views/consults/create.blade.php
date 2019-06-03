@@ -82,7 +82,7 @@
 
 		<div class="col-xs-12 col-sm-12 col-md-12">
 			<div class="form-group">
-				{!! Form::submit('Verzenden', ['class' => 'form-control', 'primary']) !!}
+				{!! Form::submit('Verzenden', ['class' => 'btn btn-primary w-100']) !!}
 			</div>
 		</div>
 	</div>

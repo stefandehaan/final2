@@ -6,6 +6,7 @@ use App\Client;
 use App\Consult;
 use App\Disease;
 use App\Doctor;
+use App\User;
 use DB;
 use Illuminate\Http\Request;
 use Spatie\Permission\Traits\HasRoles;
@@ -52,8 +53,11 @@ class ConsultController extends Controller
             $disease = Disease::all()->pluck('name', 'id');
             $medics = '';
         } else {
-            $clients = Client::all()->pluck('name', 'id');
+            $clients = Doctor::all()->where('user_role', 2)->pluck('name', 'id');
             $medics = Doctor::all()->pluck('name', 'id');
+            $user = User::all()->where('user_role', '=', 4)->pluck('name', 'id');
+            $disease = Disease::all()->pluck('name', 'id');
+
         }
 
         return view('consults.create', compact('clients', 'medics', 'user', 'disease'));

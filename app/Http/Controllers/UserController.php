@@ -34,14 +34,14 @@ class UserController extends Controller
     {
         if (auth()->user()->hasRole('admin')) {
 
-            $data = User::orderBy('id', 'DESC')->paginate(100);
+            $data = User::all();
         } else {
             $data = User::whereHas('roles', function ($q) {
                 $q->where('name', '!=', 'admin');
             })->get();
         }
-        return view('users.index', compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 100);
+
+        return view('users.index', compact('data'));
     }
 
     /**
@@ -82,7 +82,7 @@ class UserController extends Controller
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
-        
+
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
 
@@ -92,7 +92,10 @@ class UserController extends Controller
         }
         if ($user->hasRole('doctor')) {
            DB::update('update users set user_role = 4 where id = ?', [$user->id]);
-                   }
+        }
+        if ($user->hasRole('client')) {
+            DB::update('update users set user_role = 2 where id = ?', [$user->id]);
+        }
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully');
@@ -184,7 +187,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $doctors = Doctor::pluck('email', 'id');
+        $doctors = Doctor::all()->where('user_role', '4')->pluck('name', 'id');
         $insurers = Insurer::pluck('email', 'user_id');
         $bloodtypes = Blood_type::pluck('blood_type', 'id');
 

@@ -37,4 +37,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function Clients()
+    {
+        return $this->belongsToMany(__CLASS__, 'client_user', 'doctor', 'client');
+    }
 }

@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['register' => false, 'verify' => false]);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('roles', 'RoleController');
@@ -24,6 +24,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('diseases', 'DiseaseController');
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
     Route::resource('clients', 'ClientController');
+    Route::resource('permissions', 'PermissionController');
+    Route::resource('prescriptions', 'PrescriptionController');
+
 
     Route::get('/user/info/{id}', 'UserController@createInfo')
         ->name('create.info.client');

@@ -4,18 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Blood_type;
 use App\Client;
-use App\ClientInfo;
 use App\Disease;
 use App\Doctor;
 use App\Insurer;
 use App\Receipt;
 use App\TreatmentInfo;
 use App\Treatments;
-use App\User;
-use HieuLe\Alert\Facades\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class ClientController extends Controller
 {
@@ -25,19 +21,13 @@ class ClientController extends Controller
         return $test;
     }
 
-    function getUserID()
-    {
-        $userId = Auth::user()->id;
-
-        return $userId;
-    }
-
     public function index()
     {
-
-
-
-        $clients = Client::all()->where('insurance_id', '=', auth()->user()->id);
+        if (auth()->user()->hasRole('admin')) {
+            $clients = Client::all();
+        } else {
+            $clients = Client::all()->where('insurance_id', '=', auth()->user()->id);
+        }
         return view('clients.index', compact('clients'));
     }
 
@@ -84,8 +74,6 @@ class ClientController extends Controller
         $input = $request->all();
 
 
-
-
         $info->update($input);
 
         return redirect()->route('clients.index')
@@ -102,8 +90,8 @@ class ClientController extends Controller
 
     public function history()
     {
-        $receipts = Receipt::onlyTrashed()->where('client',Auth()->user()->id)->get();
-        $treatments = Treatments::has('getInfo')->where('client',Auth()->user()->id)->get();
+        $receipts = Receipt::onlyTrashed()->where('client', Auth()->user()->id)->get();
+        $treatments = Treatments::has('getInfo')->where('client', Auth()->user()->id)->get();
 
         return view('history', compact('receipts', 'treatments'));
     }

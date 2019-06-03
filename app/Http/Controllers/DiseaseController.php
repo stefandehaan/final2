@@ -63,7 +63,7 @@ class DiseaseController extends Controller
      */
     public function show(Disease $disease)
     {
-        //
+        return view('diseases.show', compact('disease'));
     }
 
     /**

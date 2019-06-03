@@ -32,9 +32,6 @@ class ClientInfo extends Model
         return $this->hasOne('App\Doctor', 'id', 'doctor_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
     public function getInsurance()
     {
         return $this->HasOne('App\Insurer', 'id', 'insurance_id');
