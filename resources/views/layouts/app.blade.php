@@ -55,7 +55,7 @@
 		div.content {
 			margin-left: 200px;
 			padding: 1px 16px;
-			height: 1000px;
+			height: auto;
 		}
 
 		@media screen and (max-width: 700px) {
@@ -86,7 +86,7 @@
 <body>
 
 
-
+@auth
 			<div class="sidebar">
 				<a class="active" href="{{ url('/') }}">
 					{{ config('Uw Dossier', 'ECD online dossier') }}
@@ -129,7 +129,7 @@
 
 				@endguest
 			</div>
-
+@endauth
 		<div class="content">
 			<main class="py-4">
 				<div class="container-fluid">
