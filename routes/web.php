@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('clients', 'ClientController');
     Route::resource('permissions', 'PermissionController');
     Route::resource('prescriptions', 'PrescriptionController');
-
+    Route::resource('insurers', 'InsurersController');
 
     Route::get('/user/info/{id}', 'UserController@createInfo')
         ->name('create.info.client');

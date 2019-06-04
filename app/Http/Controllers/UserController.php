@@ -19,10 +19,10 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role_or_permission:admin|insurance|user-list');
-        $this->middleware('role_or_permission:admin|doctor|insurance|user-create', ['only' => ['create', 'store', 'createInfo']]);
-        $this->middleware('role_or_permission:admin|doctor|insurance|user-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('role_or_permission:admin|doctor|insurance|user-delete', ['only' => ['destroy']]);
+        $this->middleware('role_or_permission:|user-list');
+        $this->middleware('role_or_permission:user-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('role_or_permission:user-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('role_or_permission:user-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -37,7 +37,7 @@ class UserController extends Controller
             $data = User::all();
         } else {
             $data = User::whereHas('roles', function ($q) {
-                $q->where('name', '!=', 'admin');
+                $q->where('name', '!=', 'admin')->where('name', '!=', 'insurance');
             })->get();
         }
 
@@ -95,6 +95,9 @@ class UserController extends Controller
         }
         if ($user->hasRole('client')) {
             DB::update('update users set user_role = 2 where id = ?', [$user->id]);
+        }
+        if ($user->hasRole('insurance')) {
+            DB::update('update users set user_role = 3 where id = ?', [$user->id]);
         }
 
         return redirect()->route('users.index')

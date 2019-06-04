@@ -33,9 +33,6 @@ class ClientController extends Controller
 
     public function show($id)
     {
-//        dd($id);
-//        $user = ClientInfo::where(['bsn' => $bsn, 'doctor' => Auth::user()->id])->firstOrFail()->getClient;
-//        $info = ClientInfo::where(['bsn' => $bsn, 'doctor' => Auth::user()->id])->first();
         $user = Client::where(['client_id' => $id])->first()->getClient;
         $info = Client::where(['client_id' => $id])->first();
         $diseases = Disease::all()->pluck('name', 'id');
@@ -46,6 +43,7 @@ class ClientController extends Controller
     public function edit($id)
     {
         $user = Client::find($id);
+        abort_unless($user->insurance_id === auth()->user()->id, '403');
 
         $doctors = Doctor::all()->where('user_role', '4')->pluck('email', 'id');
         $insurers = Insurer::pluck('email', 'user_id');
