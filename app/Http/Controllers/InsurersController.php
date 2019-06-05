@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Insurer;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class InsurersController extends Controller
 {
@@ -19,7 +21,7 @@ class InsurersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -32,7 +34,7 @@ class InsurersController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -49,8 +51,8 @@ class InsurersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -78,8 +80,8 @@ class InsurersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Insurer  $insurers
-     * @return \Illuminate\Http\Response
+     * @param Insurer $insurers
+     * @return Response
      */
     public function edit($user_id)
     {
@@ -94,10 +96,10 @@ class InsurersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Insurer $insurers
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Validation\ValidationException
+     * @param Request $request
+     * @param Insurer $insurers
+     * @return Response
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -124,8 +126,8 @@ class InsurersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Insurer  $insurers
-     * @return \Illuminate\Http\Response
+     * @param Insurer $insurers
+     * @return Response
      */
     public function destroy(Insurer $insurers)
     {

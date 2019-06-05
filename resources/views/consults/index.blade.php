@@ -58,7 +58,7 @@
 			</div>
 
 		@endforeach
-			{{ $client_consults->render() }}
+
 	</div>
 
 @endsection

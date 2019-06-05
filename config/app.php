@@ -1,5 +1,7 @@
 <?php
 
+use Spatie\Permission\PermissionServiceProvider;
+
 return [
 
     /*
@@ -67,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Amsterdam',
 
     /*
     |--------------------------------------------------------------------------
@@ -165,7 +167,7 @@ return [
         /*
          * Package Service Providers...
          */
-        \Spatie\Permission\PermissionServiceProvider::class,
+        PermissionServiceProvider::class,
         /*
          * Application Service Providers...
          */

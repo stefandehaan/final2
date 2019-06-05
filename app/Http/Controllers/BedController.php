@@ -3,24 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Bed;
+use App\Department;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class BedController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+class BedController extends Controller{
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -30,8 +22,8 @@ class BedController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -41,19 +33,20 @@ class BedController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Bed  $bed
-     * @return \Illuminate\Http\Response
+     * @param Bed $bed
+     * @return Response
      */
     public function show(Bed $bed)
     {
-        //
+        $usages = $bed->usages;
+        return view('beds.show', compact('usages'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Bed  $bed
-     * @return \Illuminate\Http\Response
+     * @param Bed $bed
+     * @return Response
      */
     public function edit(Bed $bed)
     {
@@ -63,9 +56,9 @@ class BedController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Bed  $bed
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Bed $bed
+     * @return Response
      */
     public function update(Request $request, Bed $bed)
     {
@@ -75,8 +68,8 @@ class BedController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Bed  $bed
-     * @return \Illuminate\Http\Response
+     * @param Bed $bed
+     * @return Response
      */
     public function destroy(Bed $bed)
     {

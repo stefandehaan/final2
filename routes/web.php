@@ -27,6 +27,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('permissions', 'PermissionController');
     Route::resource('prescriptions', 'PrescriptionController');
     Route::resource('insurers', 'InsurersController');
+    Route::resource('treatments', 'TreatmentsController');
+    Route::resource('medicine', 'MedicineController');
+    Route::resource('getDiseases', 'GetDiseasesController');
+
+    Route::resource('beds', 'BedController');
+    Route::resource('departments', 'DepartmentController');
+    Route::resource('bedusage', 'BedusageController');
+
 
     Route::get('/user/info/{id}', 'UserController@createInfo')
         ->name('create.info.client');

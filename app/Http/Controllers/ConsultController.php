@@ -9,6 +9,7 @@ use App\Doctor;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Spatie\Permission\Traits\HasRoles;
 
 class ConsultController extends Controller
@@ -26,13 +27,13 @@ class ConsultController extends Controller
 
     public function index(Request $request)
     {
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->hasRole('admin')|| auth()->user()->hasRole('specialist')) {
             $client_consults = Consult::orderBy('date', 'ASC')->paginate(5);
             $doctor_consults = Consult::all()->where('doctor', '=', auth()->user()->id);
 
         } elseif (auth()->user()->hasRole('client')) {
-            $client_consults = Consult::orderBy('date', 'ASC')->where('client', '=', auth()->user()->id);
-            $doctor_consults = Consult::orderBy('date', 'ASC')->where('doctor', '=', auth()->user()->id);
+            $client_consults = Consult::orderBy('date', 'ASC')->where('client_id', '=', auth()->user()->id);
+            $doctor_consults = Consult::orderBy('date', 'ASC')->where('doctor_id', '=', auth()->user()->id);
 
         } elseif (auth()->user()->hasRole('doctor')) {
             $client_consults = Consult::orderBy('date', 'ASC')->where('doctor', '=', auth()->user()->id)->paginate(5);
@@ -73,8 +74,8 @@ class ConsultController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public
     function store(Request $request)
@@ -102,8 +103,8 @@ class ConsultController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Consult $consult
-     * @return \Illuminate\Http\Response
+     * @param Consult $consult
+     * @return Response
      */
     public
     function show(Consult $consult)
@@ -114,8 +115,8 @@ class ConsultController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Consult $consult
-     * @return \Illuminate\Http\Response
+     * @param Consult $consult
+     * @return Response
      */
     public
     function edit(Consult $consult)
@@ -138,9 +139,9 @@ class ConsultController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Consult $consult
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Consult $consult
+     * @return Response
      */
     public
     function update(Request $request, Consult $consult)
@@ -169,8 +170,8 @@ class ConsultController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Consult $consult
-     * @return \Illuminate\Http\Response
+     * @param Consult $consult
+     * @return Response
      */
     public
     function destroy(Consult $consult)

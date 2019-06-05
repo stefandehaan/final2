@@ -10,7 +10,7 @@
 	<title>{{ config('app.name', 'Laravel') }}</title>
 
 	<!-- Scripts -->
-	<script src="{{ asset('js/app.js') }}" defer></script>
+	<script src="{{ asset('js/app.js') }}"></script>
 
 	<!-- Fonts -->
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -87,57 +87,77 @@
 
 
 @auth
-			<div class="sidebar">
-				<a class="active" href="{{ url('/') }}">
-					{{ config('Uw Dossier', 'ECD online dossier') }}
-				</a>
-				<a href="{{ route('dashboard') }}">Dashboard</a>
+	<div class="sidebar">
+
+		@guest
+
+			<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+
+		@else
+			<a class="active" href="{{ url('/') }}">
+				{{ config('Uw Dossier', 'ECD online dossier') }}
+			</a>
+			<a href="{{ route('dashboard') }}">Dashboard</a>
+			@can('user-list')
 				<a href="{{ route('users.index') }}">Users</a>
+			@endcan
+			@can('consult-list')
 				<a href="{{ route('consults.index') }}">Consulten</a>
-				<a href="{{ route('roles.index') }}">Rollen</a>
+			@endcan
+			@can('client-list')
 				<a href="{{ route('clients.index') }}">Clienten</a>
-				<a href="#about">Clienten</a>
-				<a href="#about">Clienten</a>
-				@guest
+			@endcan
+			@can('role-list')
+				<a href="{{ route('roles.index') }}">Rollen</a>
+			@endcan
+			@can('permission-list')
+				<a href="{{ route('permissions.index') }}">Permissies</a>
+			@endcan
+			@can('disease-list')
+				<a href="{{ route('diseases.index') }}">Ziektes</a>
+			@endcan
+			@can('treatment-list')
+				<a href="{{ route('treatments.index') }}">Behandelingen</a>
+			@endcan
+			@can('medication-list')
+				<a href="{{ route('medicine.index') }}">Medicijnen</a>
+			@endcan
+			@can('insurer-list')
+				<a href="{{ route('insurers.index') }}">Verzekeraars</a>
+			@endcan
+			@can('department-list')
+				<a href="{{ route('departments.index') }}">Afdelingen (ziekenhuis)</a>
+			@endcan
+			@can('prescription-list')
+				<a href="{{ route('prescriptions.index') }}">Voorschriften (recepten)</a>
+			@endcan
+			@can('bedusage-list')
+				<a href="{{ route('bedusage.index') }}">Beddengebruik</a>
+			@endcan
 
-						<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-
-					@if (Route::has('register'))
-
-							<a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-
-					@endif
-				@else
-
-						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-						   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-							{{ Auth::user()->name }} <span class="caret"></span>
-						</a>
-
-						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-							<a  href="{{ route('logout') }}"
-							   onclick="event.preventDefault();
+			<a href="{{ route('logout') }}"
+			   onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-								{{ __('Logout') }}
-							</a>
+				{{ __('Logout') }}
+			</a>
 
-							<form id="logout-form" action= "{{ route('logout') }}" method="POST"
-								  style="display: none;">
-								@csrf
-							</form>
-						</div>
+			<form id="logout-form" action="{{ route('logout') }}" method="POST"
+				  style="display: none;">
+				@csrf
+			</form>
 
-				@endguest
-			</div>
+
+		@endguest
+	</div>
 @endauth
-		<div class="content">
-			<main class="py-4">
-				<div class="container-fluid">
-					@yield('content')
-				</div>
-			</main>
+<div class="content">
+	<main class="py-4">
+		<div class="container-fluid">
+			@yield('content')
 		</div>
+	</main>
+</div>
 
-
+@yield('scripts')
 </body>
 </html>

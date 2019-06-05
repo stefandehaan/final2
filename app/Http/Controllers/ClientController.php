@@ -25,8 +25,11 @@ class ClientController extends Controller
     {
         if (auth()->user()->hasRole('admin')) {
             $clients = Client::all();
-        } else {
+        } elseif (auth()->user()->hasRole('insurance')) {
             $clients = Client::all()->where('insurance_id', '=', auth()->user()->id);
+        } else {
+
+            $clients = Client::all()->where('doctor_id', '=', auth()->user()->id);
         }
         return view('clients.index', compact('clients'));
     }
