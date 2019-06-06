@@ -17,9 +17,10 @@ class DepartmentController extends Controller
      */
     public function index()
     {
+
+
         $departments = Department::all();
 //            ->where('hospital', '=', auth()->user()->id);
-
 
         return view('departments.index', compact('departments'));
     }
@@ -54,13 +55,8 @@ class DepartmentController extends Controller
     public function show(Department $department)
     {
         $beds = $department->beds;
-//        $clients = User::all()->where('user_role', '=', 2);
-        $clienten = Client::all();
-        $clients = [];
-        foreach($clienten as $client){
-            $result = $client->getClient;
-            $clients[$result->id] = $result->name;
-        }
+        
+        $clients = User::all()->where('user_role', '=', 2)->pluck('name', 'id');
 
         return view('departments.show', compact('beds', 'clients'));
     }

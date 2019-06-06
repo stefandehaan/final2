@@ -10,6 +10,6 @@ class Department extends Model
 
     public function beds()
     {
-        return $this->hasMany('App\Bed', 'department');
+        return $this->hasMany(Bed::class, 'department');
     }
 }

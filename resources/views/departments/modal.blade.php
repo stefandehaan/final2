@@ -12,12 +12,15 @@
 				</button>
 			</div>
 				<div class="modal-body">
+					
 				{!! Form::open(['route' => ['bedusage.store'], 'method' => 'post']) !!}
 
 				{!! Form::hidden('bed', null, ['id' => 'bed-input']) !!}
-				{!! Form::select('client', $clients , null , ['class' => 'form-control mb-3']) !!}
+				{!! Form::select('client', $clients->toArray() , null , ['class' => 'form-control mb-3']) !!}
 				{!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
+				
 				{!! Form::close() !!}
+
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

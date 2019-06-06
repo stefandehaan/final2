@@ -40,4 +40,39 @@ Route::group(['middleware' => 'auth'], function () {
         ->name('create.info.client');
     Route::post('/user/info/{id}', 'UserController@storeInfo')
         ->name('store.info.client');
+
+//test Routes
+    Route::group(['middleware' => 'web'], function () {
+        Route::resource('test', 'TestController');
+        Route::post('test/{id}/update', '\App\Http\Controllers\TestController@update');
+        Route::get('test/{id}/delete', '\App\Http\Controllers\TestController@destroy');
+        Route::get('test/{id}/deleteMsg', '\App\Http\Controllers\TestController@DeleteMsg');
+    });
+
+//materialize Routes
+    Route::group(['middleware' => 'web'], function () {
+        Route::resource('materialize', 'MaterializeController');
+        Route::post('materialize/{id}/update', '\App\Http\Controllers\MaterializeController@update');
+        Route::get('materialize/{id}/delete', '\App\Http\Controllers\MaterializeController@destroy');
+        Route::get('materialize/{id}/deleteMsg', '\App\Http\Controllers\MaterializeController@DeleteMsg');
+    });
+
+//test_v2 Routes
+    Route::group(['middleware' => 'web'], function () {
+        Route::resource('test_v2', 'Test_v2Controller');
+        Route::post('test_v2/{id}/update', '\App\Http\Controllers\Test_v2Controller@update');
+        Route::get('test_v2/{id}/delete', '\App\Http\Controllers\Test_v2Controller@destroy');
+        Route::get('test_v2/{id}/deleteMsg', '\App\Http\Controllers\Test_v2Controller@DeleteMsg');
+    });
+});
+
+//another_test Routes
+Route::group(['middleware'=> 'web'],function(){
+  Route::resource('another_test','\App\Http\Controllers\Another_testController');
+  Route::post('another_test/{id}/update','\App\Http\Controllers\Another_testController@update');
+  Route::get('another_test/{id}/delete','\App\Http\Controllers\Another_testController@destroy');
+  Route::get('another_test/{id}/deleteMsg','\App\Http\Controllers\Another_testController@DeleteMsg');
+});
+
+Route::group(['middleware'=> 'web'],function(){
 });

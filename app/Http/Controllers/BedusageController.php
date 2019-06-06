@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BedUsage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BedusageController extends Controller
 {
@@ -37,14 +38,14 @@ class BedusageController extends Controller
     public function store(Request $request)
     {
         $model = new BedUsage([
-            "client" => $request->get("client"),
+            'client' => $request->get("client"),
             "bed" => $request->get("bed"),
             "start" => Carbon::now(),
         ]);
 
-        dump($model);
+        // dump($model);
         $model->save();
-        dd($request->all());
+        // dd($request->all());
     }
 
     /**
@@ -78,7 +79,11 @@ class BedusageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+//        dd($id);
+        DB::update('update bed_usage set until = ? where bed = ?', [Carbon::now() ,$id]);
+
+        return redirect('/departments');
+
     }
 
     /**

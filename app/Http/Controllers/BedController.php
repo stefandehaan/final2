@@ -38,7 +38,9 @@ class BedController extends Controller{
      */
     public function show(Bed $bed)
     {
+
         $usages = $bed->usages;
+
         return view('beds.show', compact('usages'));
     }
 
@@ -60,9 +62,9 @@ class BedController extends Controller{
      * @param Bed $bed
      * @return Response
      */
-    public function update(Request $request, Bed $bed)
+    public function update(Request $request, Bed $bed, $usage)
     {
-        //
+
     }
 
     /**
