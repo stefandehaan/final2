@@ -17,6 +17,6 @@ class Bed extends Model
 
     public function usages()
     {
-        return $this->hasMany(BedUsage::class, "bed");
+        return $this->hasMany(BedUsage::class, 'bed');
     }
 }

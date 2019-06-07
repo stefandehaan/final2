@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bed;
 use App\Client;
 use App\Department;
 use App\User;
@@ -54,11 +55,14 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
+        $usages = Bed::all();
+//        dd($usages);
+//        $usages = $bed->usages->sortByDesc('id');
         $beds = $department->beds;
         
         $clients = User::all()->where('user_role', '=', 2)->pluck('name', 'id');
 
-        return view('departments.show', compact('beds', 'clients'));
+        return view('departments.show', compact('beds', 'clients', 'usages'));
     }
 
     /**

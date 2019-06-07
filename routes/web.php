@@ -74,5 +74,9 @@ Route::group(['middleware'=> 'web'],function(){
   Route::get('another_test/{id}/deleteMsg','\App\Http\Controllers\Another_testController@DeleteMsg');
 });
 
-Route::group(['middleware'=> 'web'],function(){
-});
+
+
+
+
+Route::get('create','ImageController@create');
+Route::post('create','ImageController@store');

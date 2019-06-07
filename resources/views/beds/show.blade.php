@@ -22,7 +22,10 @@
 					</div>
 				</div>
 				@if (!$usage->until)
+					<div class="card-img-top">
+						{!! QrCode::size(180)->generate(route('beds.show', $usage->id)); !!}
 
+					</div>
 				<div class="row">
 					<script type="text/javascript">
 
@@ -33,7 +36,7 @@
                             return confirm('Weet u zeker dat u dit persoon wilt verwijderen');
                         }
 						</script>
-					{!! Form::open(['method' => 'PATCH','route' => ['bedusage.update', $usage->bed],'style'=>'display:inline', 'onsubmit' => 'return ConfirmDelete()']) !!}
+					{!! Form::open(['method' => 'PATCH','route' => ['bedusage.update', $usage->id],'style'=>'display:inline', 'onsubmit' => 'return ConfirmDelete()']) !!}
 					{!! Form::submit('Bed wordt niet meer door gebruiker gebruikt', ['class' => 'btn btn-danger ml-3 mt-3']) !!}
 					{!! Form::close() !!}
 
@@ -43,5 +46,7 @@
 				@endif
 			</div>
 		</div>
+		<hr class="bg-primary">
+
 	@endforeach
 @endsection

@@ -3,8 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Bed;
-use App\User;
 
 class BedUsage extends Model
 {
@@ -17,5 +15,6 @@ class BedUsage extends Model
 
     public function getClient() {
         return $this->hasOne(User::class, 'id',  'client');
+
     }
 }

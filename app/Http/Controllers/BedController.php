@@ -39,8 +39,7 @@ class BedController extends Controller{
     public function show(Bed $bed)
     {
 
-        $usages = $bed->usages;
-
+        $usages = $bed->usages->sortByDesc('id');
         return view('beds.show', compact('usages'));
     }
 

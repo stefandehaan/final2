@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\BedUsage;
-use Carbon\Carbon;
+use App\Image;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class BedusageController extends Controller
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +14,9 @@ class BedusageController extends Controller
      */
     public function index()
     {
-        //
+        $images = Image::all()->where('user_id', '=', auth()->user()->id);
+
+        return view('images.index', compact($images));
     }
 
     /**
@@ -32,40 +32,32 @@ class BedusageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $model = new BedUsage([
-            'client' => $request->get("client"),
-            "bed" => $request->get("bed"),
-            "start" => Carbon::now(),
-        ]);
-//dd($request);
-        // dump($model);
-        $model->save();
-        return redirect('beds/'. $request->bed);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
     {
         //
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified resource.
      *
-     * @param int $id
+     * @param  \App\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function show(Image $image)
+    {
+        return response($image->image, 200, ["Content-Type"=>"image/png"]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Image  $image
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Image $image)
     {
         //
     }
@@ -73,27 +65,22 @@ class BedusageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Image $image)
     {
-//        dd($id);
-
-        DB::update('update bed_usage set until = ? where id = ?', [Carbon::now(), $id]);
-
-        return redirect()->back();
-
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  \App\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Image $image)
     {
         //
     }

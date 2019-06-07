@@ -13,10 +13,7 @@
 
 					<div class="card-body">
 
-						<div class="card-img-top">
-							{!! QrCode::size(180)->generate(route('beds.show', $bed->id)); !!}
 
-						</div>
 						<div class="row">
 							<div class="col-6">
 								<a class="btn btn-sm btn-primary w-100" href="{{ route('beds.show', [$bed->id]) }}">
@@ -24,7 +21,12 @@
 								</a>
 							</div>
 							<div class="col-6">
-								<button class="addButton btn btn-sm btn-primary w-100" data-id="{{$bed->id}}"
+
+{{--								{{dd($bed)}}--}}
+{{--								@if ($bed->until)--}}
+{{--								    hello--}}
+{{--								@endif--}}
+								<button class="addButton btn btn-sm btn-primary w-100" data-id="{{$bed->id}}										"
 										data-toggle="modal" data-target="#createModal">
 									Toevoegen
 								</button>

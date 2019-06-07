@@ -3685,7 +3685,7 @@ $jscomp.polyfill = function (e, r, p, m) {
           });
         }
 
-        // Resize Image
+        // Resize Images
         var ratio = 0;
         var widthPercent = this.originalWidth / this.windowWidth;
         var heightPercent = this.originalHeight / this.windowHeight;
