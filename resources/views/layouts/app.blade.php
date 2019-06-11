@@ -101,6 +101,7 @@
 			@can('user-list')
 				<a href="{{ route('users.index') }}">Users</a>
 			@endcan
+
 			@can('consult-list')
 				<a href="{{ route('consults.index') }}">Consulten</a>
 			@endcan
@@ -132,7 +133,7 @@
 				<a href="{{ route('prescriptions.index') }}">Voorschriften (recepten)</a>
 			@endcan
 			@can('bedusage-list')
-				<a href="{{ route('bedusage.index') }}">Beddengebruik</a>
+				<a href="{{ route('departments.index') }}">Beddengebruik</a>
 			@endcan
 
 			<a href="{{ route('logout') }}"

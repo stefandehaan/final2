@@ -1995,7 +1995,7 @@ role_id</ColNames>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="448" parent="304" name="user_role">
+    <column id="448" parent="304" name="role_user">
       <Position>7</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>

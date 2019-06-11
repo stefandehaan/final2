@@ -9,6 +9,15 @@ use Illuminate\Http\Response;
 
 class BedController extends Controller{
 
+
+    public function __construct()
+    {
+        $this->middleware('permission:bed-list', ['only' => ['index']]);
+        $this->middleware('permission:bed-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:bed-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:bed-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -16,7 +25,9 @@ class BedController extends Controller{
      */
     public function create()
     {
-        //
+        $department = Department::all()->pluck('id', 'id');
+//        dd($department);
+        return view('beds.create', compact('department'));
     }
 
     /**
@@ -27,7 +38,16 @@ class BedController extends Controller{
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'department' => 'required',
+        ]);
+
+        $input = $request->except(['_token', '_method']);
+
+        $department = new Bed($input);
+        $department->save();
+
+        return redirect()->route('departments.index');
     }
 
     /**

@@ -7,11 +7,11 @@ use App\ClientInfo;
 use App\Doctor;
 use App\Insurer;
 use App\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
 
@@ -20,10 +20,10 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role_or_permission:|user-list');
-        $this->middleware('role_or_permission:user-create', ['only' => ['create', 'store', 'createInfo']]);
-        $this->middleware('role_or_permission:user-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('role_or_permission:user-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:user-list', ['only' => ['index']]);
+        $this->middleware('permission:user-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -76,7 +76,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'user_role',
+            'role_user',
             'roles' => 'required'
         ]);
 
@@ -89,17 +89,32 @@ class UserController extends Controller
 
 
         if ($user->hasRole('client')) {
+            DB::update('update users set role_user = 2 where id = ?', [$user->id]);
             return redirect()->route('create.info.client', $user->id);
         }
         if ($user->hasRole('doctor')) {
-           DB::update('update users set user_role = 4 where id = ?', [$user->id]);
-        }
-        if ($user->hasRole('client')) {
-            DB::update('update users set user_role = 2 where id = ?', [$user->id]);
+            DB::update('update users set role_user = 4 where id = ?', [$user->id]);
+
         }
         if ($user->hasRole('insurance')) {
-            DB::update('update users set user_role = 3 where id = ?', [$user->id]);
+
+            DB::update('update users set role_user = 3 where id = ?', [$user->id]);
+            return redirect()->route('create.info.insurer', $user->id);
+
         }
+        if ($user->hasRole('hospital')) {
+            DB::update('update users set role_user = 6 where id = ?', [$user->id]);
+        }
+        if ($user->hasRole('pharmacy')) {
+            DB::update('update users set role_user = 5 where id = ?', [$user->id]);
+        }
+        if ($user->hasRole('admin')) {
+            DB::update('update users set role_user = 1 where id = ?', [$user->id]);
+        }
+        if ($user->hasRole('specialist')) {
+            DB::update('update users set role_user = 7 where id = ?', [$user->id]);
+        }
+
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully');
@@ -137,7 +152,6 @@ class UserController extends Controller
         $user = User::find($id);
 
         $userRole = $user->roles->pluck('name', 'name')->all();
-
 
 
         return view('users.edit', compact('user', 'roles', 'userRole'));
@@ -191,8 +205,8 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $doctors = Doctor::all()->where('user_role', '4')->pluck('name', 'id');
-        $insurers = Insurer::pluck('email', 'user_id');
+        $doctors = Doctor::all()->where('role_user', '4')->pluck('name', 'id');
+        $insurers = Insurer::pluck('email', 'insurance_id');
         $bloodtypes = Blood_type::pluck('blood_type', 'id');
 
         return view('users.client', compact('user', 'doctors', 'insurers', 'bloodtypes'));
@@ -219,6 +233,37 @@ class UserController extends Controller
         $data['client_id'] = $id;
 
         $info = new ClientInfo($data);
+
+        $info->save();
+
+        return redirect()->route('users.create')
+            ->with('success', 'verzekeraar created successfully');
+    }
+
+    public function createInsurance($id)
+    {
+        $user = User::find($id);
+
+        return view('users.insurer', compact('user'));
+    }
+
+    public function storeInsurance(Request $request, $id)
+    {
+        $request->validate([
+
+            'name' => 'required',
+            'address' => 'required',
+            'zip' => 'required',
+            'tel' => 'required',
+            'email' => 'required',
+
+        ]);
+
+        $data = $request->all();
+
+        $data['insurance_id'] = $id;
+
+        $info = new Insurer($data);
 
         $info->save();
 

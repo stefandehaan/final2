@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 class BedusageController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:bedusage-list', ['only' => ['index']]);
+        $this->middleware('permission:bedusage-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:bedusage-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:bedusage-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

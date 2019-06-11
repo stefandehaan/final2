@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Route::get('profile', 'AvatarController@index')->name('profile');
+
+
 Auth::routes(['register' => false, 'verify' => false]);
 
 Route::group(['middleware' => 'auth'], function () {
@@ -30,10 +33,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('treatments', 'TreatmentsController');
     Route::resource('medicine', 'MedicineController');
     Route::resource('getDiseases', 'GetDiseasesController');
-
     Route::resource('beds', 'BedController');
     Route::resource('departments', 'DepartmentController');
     Route::resource('bedusage', 'BedusageController');
+
+
+//    Route::view('profile', 'profile')->name('profile');
+//    Route::get('profile', 'ProfileController');
+
+
+
 
 
     Route::get('/user/info/{id}', 'UserController@createInfo')
@@ -41,42 +50,34 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/user/info/{id}', 'UserController@storeInfo')
         ->name('store.info.client');
 
-//test Routes
-    Route::group(['middleware' => 'web'], function () {
-        Route::resource('test', 'TestController');
-        Route::post('test/{id}/update', '\App\Http\Controllers\TestController@update');
-        Route::get('test/{id}/delete', '\App\Http\Controllers\TestController@destroy');
-        Route::get('test/{id}/deleteMsg', '\App\Http\Controllers\TestController@DeleteMsg');
-    });
+    Route::get('/insurer/info/{id}', 'UserController@createInsurance')
+        ->name('create.info.insurer');
+    Route::post('/insurer/info/{id}', 'UserController@storeInsurance')
+        ->name('store.info.insurer');
 
-//materialize Routes
-    Route::group(['middleware' => 'web'], function () {
-        Route::resource('materialize', 'MaterializeController');
-        Route::post('materialize/{id}/update', '\App\Http\Controllers\MaterializeController@update');
-        Route::get('materialize/{id}/delete', '\App\Http\Controllers\MaterializeController@destroy');
-        Route::get('materialize/{id}/deleteMsg', '\App\Http\Controllers\MaterializeController@DeleteMsg');
-    });
 
-//test_v2 Routes
-    Route::group(['middleware' => 'web'], function () {
-        Route::resource('test_v2', 'Test_v2Controller');
-        Route::post('test_v2/{id}/update', '\App\Http\Controllers\Test_v2Controller@update');
-        Route::get('test_v2/{id}/delete', '\App\Http\Controllers\Test_v2Controller@destroy');
-        Route::get('test_v2/{id}/deleteMsg', '\App\Http\Controllers\Test_v2Controller@DeleteMsg');
-    });
 });
 
-//another_test Routes
-Route::group(['middleware'=> 'web'],function(){
-  Route::resource('another_test','\App\Http\Controllers\Another_testController');
-  Route::post('another_test/{id}/update','\App\Http\Controllers\Another_testController@update');
-  Route::get('another_test/{id}/delete','\App\Http\Controllers\Another_testController@destroy');
-  Route::get('another_test/{id}/deleteMsg','\App\Http\Controllers\Another_testController@DeleteMsg');
-});
+//
+//Route::get('create','ImageController@create');
+//Route::post('create','ImageController@store');
 
-
-
-
-
-Route::get('create','ImageController@create');
-Route::post('create','ImageController@store');
+//Route::group(['middleware'=> 'web'],function(){
+//});
+//
+//Route::group(['middleware'=> 'web'],function(){
+//});
+////album Routes
+//Route::get('/', array('as' => 'index','uses' => 'AlbumController@getList'));
+//Route::get('/createalbum', array('as' => 'create_album_form','uses' => 'AlbumsController@getForm'));
+//Route::post('/createalbum', array('as' => 'create_album','uses' => 'AlbumsController@postCreate'));
+//Route::get('/deletealbum/{id}', array('as' => 'delete_album','uses' => 'AlbumsController@getDelete'));
+//Route::get('/album/{id}', array('as' => 'show_album','uses' => 'AlbumsController@getAlbum'));
+//
+////image Routes
+//Route::group(['middleware'=> 'web'],function(){
+//  Route::resource('image','\App\Http\Controllers\ImageController');
+//  Route::post('image/{id}/update','\App\Http\Controllers\ImageController@update');
+//  Route::get('image/{id}/delete','\App\Http\Controllers\ImageController@destroy');
+//  Route::get('image/{id}/deleteMsg','\App\Http\Controllers\ImageController@DeleteMsg');
+//});

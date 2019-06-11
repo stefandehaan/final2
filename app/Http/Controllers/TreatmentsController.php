@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Disease;
 use App\Treatment;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class TreatmentController extends Controller
+class TreatmentsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,14 @@ class TreatmentController extends Controller
      */
     public function index()
     {
-        //
+        $treatments = Treatment::all();
+//        dd($treatments);
+        $client = User::all()->where('id', '=', $treatments->first()->client);
+        $specialist = User::all()->where('id', '=', $treatments->first()->specialist);
+        $disease = Disease::all()->where('id', '=', $treatments->first()->disease);
+//        dd($client->first()->name);
+
+        return view('treatments.index', compact('treatments', 'client', 'specialist', 'disease'));
     }
 
     /**
@@ -25,7 +34,11 @@ class TreatmentController extends Controller
      */
     public function create()
     {
-        //
+        $client = User::all()->where('role_user', '=', 2)->pluck('name', 'id');
+        $specialist = User::all()->where('role_user', '=', 7)->pluck('name', 'id');
+        $disease = Disease::all()->pluck('name', 'id');
+
+        return view('treatments.create', compact('client', 'specialist', 'disease'));
     }
 
     /**
@@ -36,7 +49,24 @@ class TreatmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+
+            'client' => ['required'],
+            'specialist' => ['required'],
+            'description' => ['required'],
+            'disease' => ['required'],
+
+        ]);
+
+        $input = $request->except(['_token', '_method']);
+//        $input['user_id'] = $id;
+//dd($id);
+        $treatment = Treatment::create($input);
+//        dd($disease->first());
+        $treatment->save();
+
+
+        return redirect('treatments');
     }
 
     /**

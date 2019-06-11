@@ -3,9 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Medicine;
+
 
 class MedicineController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:medicine-list');
+        $this->middleware('permission:medicine-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:medicine-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:medicine-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +22,9 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        //
+        $data = Medicine::all();
+        // dd($data);
+        return view('medicine/index', \compact('data'));
     }
 
     /**
@@ -23,7 +34,7 @@ class MedicineController extends Controller
      */
     public function create()
     {
-        //
+        return \view('medicine/create');
     }
 
     /**
@@ -34,7 +45,16 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $data = \request()->all();
+
+        $medicine = new Medicine($data);
+        $medicine->save();
+
+        return redirect()->route('medicine.index');
     }
 
     /**
@@ -56,7 +76,9 @@ class MedicineController extends Controller
      */
     public function edit($id)
     {
-        //
+        $medicine = Medicine::find($id);
+
+        return view('medicine.edit', compact('medicine'));
     }
 
     /**
@@ -68,7 +90,18 @@ class MedicineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $data = $request->except(['_token', '_method']);
+
+        // $medicine = new Medicine($data);
+        $medicine = Medicine::where('id', '=', $id);
+        $medicine->update($data);
+
+        return redirect()->route('medicine.index');
     }
 
     /**
@@ -79,6 +112,8 @@ class MedicineController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Medicine::find($id)->delete();
+
+        return redirect()->route('medicine.index');
     }
 }

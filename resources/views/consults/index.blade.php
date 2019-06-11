@@ -2,15 +2,17 @@
 
 
 @section('content')
-
+@can('consult-list')
 	<div class="row">
 		<div class="col-lg-12 margin-tb">
 			<div class="pull-left">
 				<h2>Consult Management</h2>
 			</div>
-			<div class="pull-right">
-				<a class="btn btn-success" href="{{ route('consults.create') }}"> Create New Consult</a>
-			</div>
+			@can('consult-create')
+				<div class="pull-right">
+					<a class="btn btn-success" href="{{ route('consults.create') }}"> Create New Consult</a>
+				</div>
+			@endcan
 		</div>
 	</div>
 
@@ -33,32 +35,40 @@
 								{{$consult->summary}}
 							</li>
 							<li class="list-group-item">
-								<a href="{{ route('consults.show', $consult->id) }}" class="btn btn-info">Show</a>
-								<a href="{{ route('consults.edit', $consult->id) }}" class="btn btn-warning">Edit</a>
-								<script type="text/javascript">
 
-                                    function ConfirmDelete() {
+									<a href="{{ route('consults.show', $consult->id) }}" class="btn btn-info">Show</a>
 
-                                        var x = confirm("Weet u zeker dat u dit consult wilt verwijderen");
-                                        if (x)
-                                            return true;
-                                        else
-                                            return false;
-                                    }
+								@can('consult-edit')
+									<a href="{{ route('consults.edit', $consult->id) }}"
+									   class="btn btn-warning">Edit</a>
+								@endcan
+								@can('consult-delete')
+									<script type="text/javascript">
 
-								</script>
-								{!! Form::open(['method' => 'DELETE','route' => ['consults.destroy', $consult->id],'style'=>'display:inline', 'onsubmit' => 'return ConfirmDelete()']) !!}
-								{!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-								{!! Form::close() !!}
+                                        function ConfirmDelete() {
+
+                                            var x = confirm("Weet u zeker dat u dit consult wilt verwijderen");
+                                            if (x)
+                                                return true;
+                                            else
+                                                return false;
+                                        }
+
+									</script>
+									{!! Form::open(['method' => 'DELETE','route' => ['consults.destroy', $consult->id],'style'=>'display:inline', 'onsubmit' => 'return ConfirmDelete()']) !!}
+									{!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+									{!! Form::close() !!}
+
+								@endcan
 							</li>
 						</ul>
 					</div>
 				</div>
-			<hr class="bg-primary">
+				<hr class="bg-primary">
 			</div>
 
 		@endforeach
 
 	</div>
-
+@endcan
 @endsection

@@ -7,7 +7,7 @@
 				<h2>Create New Consult</h2>
 			</div>
 			<div class="pull-right">
-				<a class="btn btn-primary" href="{{ route('users.index') }}"> Back</a>
+				<a class="btn btn-primary" href="{{ route('consults.index') }}"> Back</a>
 			</div>
 		</div>
 	</div>
@@ -23,20 +23,20 @@
 			</ul>
 		</div>
 	@endif
-
+@can('consult-edit')
 	{!! Form::model($consult, ['method' => 'PATCH','route' => ['consults.update', $consult->id]]) !!}
 
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12">
 			<div class="form-group">
 				<strong>Name client:</strong>
-				{!! Form::select('client', $clients->toArray() , null , ['class' => 'form-control']) !!}
+				{!! Form::select('client', $client->toArray() , null , ['class' => 'form-control', 'disabled']) !!}
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-12">
 			<div class="form-group">
 				<strong>Name doctor:</strong>
-				{!! Form::select('doctor', $user->toArray() , null , ['class' => 'form-control']) !!}
+				{!! Form::select('doctor', $medics->toArray() , null , ['class' => 'form-control']) !!}
 				{{--				{!! Form::text('doctor', auth()->user()->id , ['class' => 'form-control', 'disabled']) !!}--}}
 			</div>
 		</div>
@@ -87,7 +87,7 @@
 		</div>
 	</div>
 	{!! Form::close() !!}
-
+@endcan
 
 @endsection
 

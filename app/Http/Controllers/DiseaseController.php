@@ -9,6 +9,14 @@ use Illuminate\Validation\ValidationException;
 
 class DiseaseController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:disease-list');
+        $this->middleware('permission:disease-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:disease-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:disease-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -50,8 +58,8 @@ class DiseaseController extends Controller
 
         $input = $request->all();
 
-        $user = Disease::create($input);
-        $user->save();
+        $disease = Disease::create($input);
+        $disease->save();
 
         return redirect()->route('diseases.index')
             ->with('success', 'Disease created successfully');

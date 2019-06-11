@@ -13,22 +13,22 @@ class PermissionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role_or_permission:Admin|permission-list');
-        $this->middleware('role_or_permission:Admin|permission-create', ['only' => ['create','store']]);
-        $this->middleware('role_or_permission:Admin|permission-edit', ['only' => ['edit','update']]);
-        $this->middleware('role_or_permission:Admin|permission-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:permission-list');
+        $this->middleware('permission:permission-create', ['only' => ['create','store']]);
+        $this->middleware('permission:permission-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
     }
 
     public function index(Request $request)
     {
-        $permissions = Permission::orderBy('id','ASC')->paginate(5);
+        $permissions = Permission::orderBy('id','ASC')->paginate(500);
         return view('permissions.index',compact('permissions'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+            ->with('i', ($request->input('page', 1) - 1) * 500);
     }
     public function create()
     {
         $permission = Permission::get();
-        return view('permission.create', compact('permission'));
+        return view('permissions.create', compact('permission'));
     }
 
     public function store(Request $request)

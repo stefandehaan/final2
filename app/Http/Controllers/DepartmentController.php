@@ -11,6 +11,14 @@ use Illuminate\Http\Response;
 
 class DepartmentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:department-list');
+        $this->middleware('permission:department-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:department-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:department-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +41,10 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+//        dd(User::all()->where('role_user', '=', 6));
+        $hospital = User::all()->where('role_user', '=', 6)->pluck('name', 'id');
+
+        return view('departments.create', compact('hospital'));
     }
 
     /**
@@ -44,7 +55,16 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'hospital' => 'required',
+        ]);
+
+        $input = $request->except(['_token', '_method']);
+
+        $department = new Department($input);
+        $department->save();
+
+        return redirect()->route('departments.index');
     }
 
     /**
@@ -59,8 +79,8 @@ class DepartmentController extends Controller
 //        dd($usages);
 //        $usages = $bed->usages->sortByDesc('id');
         $beds = $department->beds;
-        
-        $clients = User::all()->where('user_role', '=', 2)->pluck('name', 'id');
+
+        $clients = User::all()->where('role_user', '=', 2)->pluck('name', 'id');
 
         return view('departments.show', compact('beds', 'clients', 'usages'));
     }

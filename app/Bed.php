@@ -9,7 +9,7 @@ class Bed extends Model
 {
     protected $table  = 'bed';
 
-
+protected $fillable = ['department'];
     public function department()
     {
         return $this->belongsTo(Department::class, 'id', 'department');

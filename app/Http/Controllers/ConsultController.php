@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
 use App\Consult;
 use App\Disease;
 use App\Doctor;
@@ -18,21 +17,21 @@ class ConsultController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role_or_permission:admin|doctor|consult-list');
-        $this->middleware('role_or_permission:admin|doctor|consult-create', ['only' => ['create', 'store', 'createInfo']]);
-        $this->middleware('role_or_permission:admin|doctor|consult-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('role_or_permission:admin|doctor|consult-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:consult-list');
+        $this->middleware('permission:consult-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:consult-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:consult-delete', ['only' => ['destroy']]);
     }
 
 
-    public function index(Request $request)
+    public function index()
     {
-        if (auth()->user()->hasRole('admin')|| auth()->user()->hasRole('specialist')) {
+        if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('specialist')) {
             $client_consults = Consult::orderBy('date', 'ASC')->paginate(5);
             $doctor_consults = Consult::all()->where('doctor', '=', auth()->user()->id);
 
         } elseif (auth()->user()->hasRole('client')) {
-            $client_consults = Consult::orderBy('date', 'ASC')->where('client_id', '=', auth()->user()->id);
+            $client_consults = Consult::all()->where('client', '=', auth()->user()->id);
             $doctor_consults = Consult::orderBy('date', 'ASC')->where('doctor_id', '=', auth()->user()->id);
 
         } elseif (auth()->user()->hasRole('doctor')) {
@@ -54,9 +53,9 @@ class ConsultController extends Controller
             $disease = Disease::all()->pluck('name', 'id');
             $medics = '';
         } else {
-            $clients = Doctor::all()->where('user_role', 2)->pluck('name', 'id');
+            $clients = Doctor::all()->where('role_user', 2)->pluck('name', 'id');
             $medics = Doctor::all()->pluck('name', 'id');
-            $user = User::all()->where('user_role', '=', 4)->pluck('name', 'id');
+            $user = User::all()->where('role_user', '=', 4)->pluck('name', 'id');
             $disease = Disease::all()->pluck('name', 'id');
 
         }
@@ -122,18 +121,20 @@ class ConsultController extends Controller
     function edit(Consult $consult)
     {
         if ($this->getGuard() !== 'admin') {
-            $clients = Doctor::find(Auth()->user()->id)->Clients->pluck('name', 'id');
+            $client = Doctor::find(Auth()->user()->id)->Clients->pluck('name', 'id');
             $user = Doctor::all()->where('id', '=', auth()->user()->id)->pluck('name', 'id');
-
-//            $user = Doctor::find(auth()->user()->id)->pluck('name', 'id');
             $disease = Disease::all()->pluck('name', 'id');
             $medics = '';
-        } else {
-            $clients = Client::all()->pluck('name', 'id');
-            $medics = Doctor::all()->pluck('name', 'id');
+        } elseif ($this->getGuard() === 'admin') {
+
+            $client = User::all()->where('id', '=', $consult->client)->pluck('name', 'id');
+            $medics = User::all()->where('role_user', '=', '4')->pluck('name', 'id');
+            $user = Doctor::all()->pluck('name', 'id');
+            $disease = Disease::all()->pluck('name', 'id');
+
         }
 
-        return view('consults.edit', compact('consult', 'clients', 'medics', 'user', 'disease'));
+        return view('consults.edit', compact('consult', 'client', 'medics', 'user', 'disease'));
     }
 
     /**
@@ -147,7 +148,6 @@ class ConsultController extends Controller
     function update(Request $request, Consult $consult)
     {
         $this->validate($request, [
-            'client' => 'required',
             'doctor' => 'required',
             'subject' => 'required',
             'summary' => 'required',
@@ -158,13 +158,13 @@ class ConsultController extends Controller
         ]);
 
         $data = $request->all();
-
+        $data['client'] = $consult->client;
 
         $consult->update($data);
 
 
         return redirect()->route('consults.index')
-            ->with('success', 'consult aangemaakt');
+            ->with('success', 'consult aangepast');
     }
 
     /**

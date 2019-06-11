@@ -13,10 +13,10 @@ class InsurersController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role_or_permission:insurer-list', ['only' => ['index']]);
-        $this->middleware('role_or_permission:insurer-create', ['only' => ['create', 'store', 'createInfo']]);
-        $this->middleware('role_or_permission:insurer-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('role_or_permission:insurer-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:insurer-list', ['only' => ['index']]);
+        $this->middleware('permission:insurer-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:insurer-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:insurer-delete', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -42,7 +42,7 @@ class InsurersController extends Controller
         $hasInsurer = Insurer::all()->pluck('user_id');
 
 //        dd($hasInsurer);
-        $insurers = User::all()->where('user_role', 3)->except($hasInsurer->all())->pluck('name', 'id');
+        $insurers = User::all()->where('role_user', 3)->except($hasInsurer->all())->pluck('name', 'id');
 
 //        dd($insurers);
         return view('insurers.create', compact('insurers'));

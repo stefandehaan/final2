@@ -1,11 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
-class DatabaseSeeder extends Seeder
+class
+DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -31,8 +30,8 @@ class DatabaseSeeder extends Seeder
 //                'blood_type' => $type
 //
 //            ]);
-
 //
+//        }
 //                $roles = [
 //                'admin',
 //                'client',
@@ -46,8 +45,8 @@ class DatabaseSeeder extends Seeder
 //            foreach ($roles as $role) {
 //                Role::create(['name' => $role]);
 //            }
-//
-//            $permissions = [
+
+        $permissions = [
 //                'role-list',
 //                'role-create',
 //                'role-edit',
@@ -76,40 +75,78 @@ class DatabaseSeeder extends Seeder
 //                'disease-create',
 //                'disease-edit',
 //                'disease-delete',
-//
-//
-//            ];
-//
-//
-//            foreach ($permissions as $permission) {
-//                Permission::create(['name' => $permission]);
-//            }
-//
-//
-//        }
-        factory(App\User::class, 10)->create()->each(function ($user) {
-            $user->assignRole('insurance');
-        });
-        factory(App\User::class, 10)->create()->each(function ($user) {
-            $user->assignRole('doctor');
-        });
-        factory(App\User::class, 10)->create()->each(function ($user) {
-            $user->assignRole('admin');
-        });
-        factory(App\User::class, 10)->create()->each(function ($user) {
-            $user->assignRole('client');
-        });
-        factory(App\User::class, 10)->create()->each(function ($user) {
-            $user->assignRole('pharmacy');
-        });
-        factory(App\User::class, 10)->create()->each(function ($user) {
-            $user->assignRole('specialist');
-        });
-        factory(App\User::class, 10)->create()->each(function ($user) {
-            $user->assignRole('hospital');
-        });
-//        // $this->call(UsersTableSeeder::class);
+//            'treatment-list',
+//            'treatment-create',
+//            'treatment-edit',
+//            'treatment-delete',
+//            'medicine-list',
+//            'medicine-create',
+//            'medicine-edit',
+//            'medicine-delete',
+//            'insurers-list',
+//            'insurers-create',
+//            'insurers-edit',
+//            'insurers-delete',
+//            'department-list',
+//            'department-create',
+//            'department-edit',
+//            'department-delete',
+//            'bed-list',
+//            'bed-create',
+//            'bed-edit',
+//            'bed-delete',
+//        'bed-show',
+//        'role-show',
+//        'permission-show',
+//        'user-show',
+//        'client-show',
+//        'doctor-show',
+//        'consult-show',
+//        'disease-show',
+//        'treatment-show',
+//        'medicine-show',
+//        'insurers-show',
+//        'department-show',
+        'prescription-create',
+        'prescription-show',
+        'prescription-edit',
+        'prescription-delete',
+        'prescription-list',
+
+
+
+        ];
+
+
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission]);
         }
 
-    }
 
+//        factory(App\User::class, 10)->create()->each(function ($user) {
+//            $user->assignRole('specialist');
+//
+//        });
+        // factory(App\User::class, 10)->create()->each(function ($user) {
+        //     $user->assignRole('doctor');
+        // });
+        // factory(App\User::class, 10)->create()->each(function ($user) {
+        //     $user->assignRole('admin');
+        // });
+        // factory(App\User::class, 10)->create()->each(function ($user) {
+        //     $user->assignRole('client');
+        // });
+        // factory(App\User::class, 10)->create()->each(function ($user) {
+        //     $user->assignRole('pharmacy');
+        // });
+        // factory(App\User::class, 10)->create()->each(function ($user) {
+        //     $user->assignRole('specialist');
+        // });
+        // factory(App\User::class, 10)->create()->each(function ($user) {
+        //     $user->assignRole('hospital');
+        // });
+//        // $this->call(UsersTableSeeder::class);
+
+
+    }
+}

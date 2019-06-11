@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:client-list', ['only' => ['index']]);
+        $this->middleware('permission:client-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:client-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:client-delete', ['only' => ['destroy']]);
+    }
     public function getGuard()
     {
         $test = auth()->user()->getRoleNames()['0'];
@@ -46,10 +54,10 @@ class ClientController extends Controller
     public function edit($id)
     {
         $user = Client::find($id);
-        abort_unless($user->insurance_id === auth()->user()->id, '403');
+        abort_unless($user->insurance_id === auth()->user()->id || auth()->user()->hasRole('admin'), '403');
 
-        $doctors = Doctor::all()->where('user_role', '4')->pluck('email', 'id');
-        $insurers = Insurer::pluck('email', 'user_id');
+        $doctors = Doctor::all()->where('role_user', '4')->pluck('email', 'id');
+        $insurers = Insurer::pluck('email', 'insurance_id');
         $bloodtypes = Blood_type::pluck('blood_type', 'id');
 
         return view('clients.edit', compact('user', 'doctors', 'insurers', 'bloodtypes'));

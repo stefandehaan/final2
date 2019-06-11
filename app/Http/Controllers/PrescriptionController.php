@@ -14,10 +14,10 @@ class PrescriptionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role_or_permission:admin|prescription-list', ['only' => ['index']]);
-        $this->middleware('role_or_permission:admin|prescription-create', ['only' => ['create', 'store', 'createInfo']]);
-        $this->middleware('role_or_permission:admin|prescription-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('role_or_permission:admin|prescription-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:prescription-list', ['only' => ['index']]);
+        $this->middleware('permission:prescription-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:prescription-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:prescription-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -59,7 +59,7 @@ class PrescriptionController extends Controller
         }
 
         if (auth()->user()->hasRole('specialist') || auth()->user()->hasRole('admin')) {
-            $clients = User::all()->where('user_role', '=', 2)->pluck('name', 'id');
+            $clients = User::all()->where('role_user', '=', 2)->pluck('name', 'id');
             $medicine = Medicine::all()->pluck('name', 'id');
             $test = null;
         }

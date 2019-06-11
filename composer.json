@@ -16,6 +16,7 @@
         "laravel/passport": "^7.3",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.8",
+        "matriphe/imageupload": "^6.1",
         "simplesoftwareio/simple-qrcode": "^2.0",
         "spatie/laravel-medialibrary": "^7.6",
         "spatie/laravel-permission": "^2.37"

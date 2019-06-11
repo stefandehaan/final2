@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class GetDiseasesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:-list');
+        $this->middleware('permission:consult-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:consult-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:consult-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

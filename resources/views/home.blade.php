@@ -60,13 +60,13 @@
 					<div class="card-body">
 						<ul class="list-group">
 							<li class="list-group-item">
-								Uw naam:
-								{{ auth()->user()->name }}
+								Uw doctor:
+								{{$doctor->first()->name }}
 							</li>
 
 							<li class="list-group-item">
-								Uw e-mail:
-								{{ auth()->user()->name }}
+								E-mail doctor:
+								{{ $doctor->first()->email }}
 							</li>
 						</ul>
 					</div>
