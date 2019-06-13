@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\App;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Image;
 use Amranidev\Ajaxis\Ajaxis;
+use App\Image;
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use URL;
 
 /**
@@ -17,6 +17,14 @@ use URL;
  */
 class ImageController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:image-list', ['only' => ['index']]);
+        $this->middleware('permission:image-create', ['only' => ['create', 'store', 'createInfo']]);
+        $this->middleware('permission:image-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:image-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -25,8 +33,14 @@ class ImageController extends Controller
     public function index()
     {
         $title = 'Index - image';
-        $images = Image::paginate(6);
-        return view('image.index',compact('images','title'));
+
+        if (auth()->user()->hasRole('client')) {
+            $images = Image::all()->where('user_id', '=', auth()->user()->id);
+        } else {
+            $images = Image::all();
+        }
+
+        return view('image.index', compact('title', 'images'));
     }
 
     /**
@@ -37,31 +51,33 @@ class ImageController extends Controller
     public function create()
     {
         $title = 'Create - image';
-        
-        return view('image.create');
+
+        $users = User::all()->where('role_user', '=', 2)->pluck('name', 'id');
+        return view('image.create', compact('title', 'users'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param    \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return  \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+//dd($request->all());
         $image = new Image();
 
-        
-        $image->album_id = $request->album_id;
 
-        
-        $image->image = $request->image;
+        $image->user_id = $request->user_id;
 
-        
-        $image->description = $request->description;
+        $file = $request->file('image');
+        $content = $file->openFile()->fread($file->getSize());
+        $image->image = $content;
 
-        
-        
+
+        $image->filename = $request->image->getClientOriginalName();
+
+
         $image->save();
 
         $pusher = App::make('pusher');
@@ -71,69 +87,75 @@ class ImageController extends Controller
         //Here is a pusher notification example when you create a new resource in storage.
         //you can modify anything you want or use it wherever.
         $pusher->trigger('test-channel',
-                         'test-event',
-                        ['message' => 'A new image has been created !!']);
+            'test-event',
+            ['message' => 'A new image has been created !!']);
 
-        return redirect('image');
+        return redirect('images');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param    \Illuminate\Http\Request  $request
-     * @param    int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return  \Illuminate\Http\Response
      */
-    public function show($id,Request $request)
+    public function show($id, Request $request)
     {
-        $title = 'Show - image';
+        $image = Image::find($id);
 
-        if($request->ajax())
-        {
-            return URL::to('image/'.$id);
+        if (auth()->user()->hasRole('client')) {
+            abort_if($image->user_id !== auth()->user()->id, '403');
         }
+        $filename = $image->filename;
 
-        $image = Image::findOrfail($id);
-        return view('image.show',compact('title','image'));
+        $extension = explode(".", $filename);
+        $extension = strtolower($extension[count($extension) - 1]);
+
+        $headers = [
+            "Content-Type" => "image/${extension}",
+            "Content-Disposition" => "inline; filename=\"${filename}\""
+        ];
+
+        return response($image->image, 200, $headers);
     }
 
     /**
      * Show the form for editing the specified resource.
-     * @param    \Illuminate\Http\Request  $request
-     * @param    int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return  \Illuminate\Http\Response
      */
-    public function edit($id,Request $request)
+    public function edit($id, Request $request)
     {
         $title = 'Edit - image';
-        if($request->ajax())
-        {
-            return URL::to('image/'. $id . '/edit');
+        if ($request->ajax()) {
+            return URL::to('image/' . $id . '/edit');
         }
 
-        
+
         $image = Image::findOrfail($id);
-        return view('image.edit',compact('title','image'  ));
+        return view('image.edit', compact('title', 'image'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param    \Illuminate\Http\Request  $request
-     * @param    int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return  \Illuminate\Http\Response
      */
-    public function update($id,Request $request)
+    public function update($id, Request $request)
     {
         $image = Image::findOrfail($id);
-    	
+
         $image->album_id = $request->album_id;
-        
+
         $image->image = $request->image;
-        
+
         $image->description = $request->description;
-        
-        
+
+
         $image->save();
 
         return redirect('image');
@@ -143,15 +165,14 @@ class ImageController extends Controller
      * Delete confirmation message by Ajaxis.
      *
      * @link      https://github.com/amranidev/ajaxis
-     * @param    \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return  String
      */
-    public function DeleteMsg($id,Request $request)
+    public function DeleteMsg($id, Request $request)
     {
-        $msg = Ajaxis::MtDeleting('Warning!!','Would you like to remove This?','/image/'. $id . '/delete');
+        $msg = Ajaxis::MtDeleting('Warning!!', 'Would you like to remove This?', '/image/' . $id . '/delete');
 
-        if($request->ajax())
-        {
+        if ($request->ajax()) {
             return $msg;
         }
     }
@@ -159,13 +180,13 @@ class ImageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param    int $id
+     * @param int $id
      * @return  \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-     	$image = Image::findOrfail($id);
-     	$image->delete();
-        return URL::to('image');
+        $image = Image::findOrfail($id);
+        $image->delete();
+        return redirect()->route('images.index');
     }
 }

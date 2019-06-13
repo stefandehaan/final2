@@ -10,13 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
-
-//Route::get('profile', 'AvatarController@index')->name('profile');
-
 
 Auth::routes(['register' => false, 'verify' => false]);
 
@@ -36,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('beds', 'BedController');
     Route::resource('departments', 'DepartmentController');
     Route::resource('bedusage', 'BedusageController');
+    Route::resource('images', 'ImageController');
 
 
 //    Route::view('profile', 'profile')->name('profile');
@@ -81,3 +78,5 @@ Route::group(['middleware' => 'auth'], function () {
 //  Route::get('image/{id}/delete','\App\Http\Controllers\ImageController@destroy');
 //  Route::get('image/{id}/deleteMsg','\App\Http\Controllers\ImageController@DeleteMsg');
 //});
+
+

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-	@can('consult-creaete')
+	@can('consult-create')
 		<div class="row">
 			<div class="col-lg-12 margin-tb">
 				<div class="pull-left">
@@ -89,8 +89,6 @@
 		</div>
 		{!! Form::close() !!}
 
-	@else
-		u heeft geen toegang
 
 	@endcan
 @endsection

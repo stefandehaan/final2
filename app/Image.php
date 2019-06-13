@@ -2,9 +2,13 @@
 
 namespace App;
 
-use Matriphe\Imageupload\ImageuploadModel;
+use Illuminate\Database\Eloquent\Model;
 
-class Image extends ImageuploadModel
+
+class Image extends Model
 {
     protected $table = 'images';
+    protected $fillable = ["image", "filename"];
+
+
 }

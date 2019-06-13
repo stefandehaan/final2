@@ -10,6 +10,15 @@ use Illuminate\Http\Response;
 
 class TreatmentsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:treatment-list');
+        $this->middleware('permission:treatment-create', ['only' => ['create','store']]);
+        $this->middleware('permission:treatment-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:treatment-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +26,15 @@ class TreatmentsController extends Controller
      */
     public function index()
     {
+        $test = Treatment::all();
+
+        if (auth()->user()->hasRole('client')){
+            $treatments = Treatment::all()->where('client','=', auth()->user()->id);
+
+        }else {
+
         $treatments = Treatment::all();
+        }
 //        dd($treatments);
         $client = User::all()->where('id', '=', $treatments->first()->client);
         $specialist = User::all()->where('id', '=', $treatments->first()->specialist);

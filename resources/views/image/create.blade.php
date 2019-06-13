@@ -1,30 +1,39 @@
-@extends('scaffold-interface.layouts.defaultMaterialize')
+@extends('layouts.app')
 @section('title','Create')
 @section('content')
 
-<div class = 'container'>
-    <h1>
-        Create image
-    </h1>
-    <form method = 'get' action = '{!!url("image")!!}'>
-        <button class = 'btn blue'>image Index</button>
-    </form>
-    <br>
-    <form method = 'POST' action = '{!!url("image")!!}'>
-        <input type = 'hidden' name = '_token' value = '{{ Session::token() }}'>
-        <div class="input-field col s6">
-            <input id="album_id" name = "album_id" type="text" class="validate">
-            <label for="album_id">album_id</label>
-        </div>
-        <div class="input-field col s6">
-            <input id="image" name = "image" type="text" class="validate">
-            <label for="image">image</label>
-        </div>
-        <div class="input-field col s6">
-            <input id="description" name = "description" type="text" class="validate">
-            <label for="description">description</label>
-        </div>
-        <button class = 'btn red' type ='submit'>Create</button>
-    </form>
-</div>
+	<div class='container'>
+		<h1>
+			Add image
+		</h1>
+		{!! Form::open(['route' => 'images.store', 'method' => 'post', 'files' => true]) !!}
+		<div class="input-group mb-3">
+			<div class="custom-file">
+
+				{!! Form::file('image', ['class' => 'custom-file-input']) !!}
+				<label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose
+					file max 2048kb</label>
+			</div>
+			<div class="input-group-append">
+				<span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+			</div>
+		</div>
+		{!! Form::select('user_id', $users->toArray() , null , ['class' => 'form-control']) !!}
+		{!! Form::submit('Submit', ['class' => 'form-control']) !!}
+
+		{!! Form::close() !!}
+
+	</div>
+	<script>
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     var elems = document.querySelectorAll('select');
+        //     var instances = M.FormSelect.init(elems, options);
+        // });
+
+        // Or with jQuery
+
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+	</script>
 @endsection

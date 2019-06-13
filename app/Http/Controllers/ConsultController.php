@@ -46,7 +46,8 @@ class ConsultController extends Controller
     {
 //dd(auth()->user());
         if ($this->getGuard() !== 'admin') {
-            $clients = Doctor::find(Auth()->user()->id)->Clients->pluck('name', 'id');
+//            $clients = Doctor::find(Auth()->user()->id)->Clients->pluck('name', 'id');
+            $clients = User::all()->where('role_user', '=', 2)->pluck('name', 'id');
             $user = Doctor::all()->where('id', '=', auth()->user()->id)->pluck('name', 'id');
 
 //            $user = Doctor::find(auth()->user()->id)->pluck('name', 'id');

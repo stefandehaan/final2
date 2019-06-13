@@ -1,41 +1,79 @@
-@extends('scaffold-interface.layouts.defaultMaterialize')
+@extends('layouts.app')
 @section('title','Index')
 @section('content')
+	<div class="row">
+		<div class="col-lg-12 margin-tb">
+			<div class="pull-left">
+				<h2>Afbeeldingen Management</h2>
+			</div>
+			@can('image-create')
+				<div class="pull-right">
+					<a class="btn btn-success" href="{{ route('images.create') }}">Voeg afbeelding toe</a>
+				</div>
+			@endcan
+		</div>
+	</div>
 
-<div class = 'container'>
-    <h1>
-        image Index
-    </h1>
-    <div class="row">
-        <form class = 'col s3' method = 'get' action = '{!!url("image")!!}/create'>
-            <button class = 'btn red' type = 'submit'>Create New image</button>
-        </form>
-    </div>
-    <table>
-        <thead>
-            <th>album_id</th>
-            <th>image</th>
-            <th>description</th>
-            <th>actions</th>
-        </thead>
-        <tbody>
-            @foreach($images as $image) 
-            <tr>
-                <td>{!!$image->album_id!!}</td>
-                <td>{!!$image->image!!}</td>
-                <td>{!!$image->description!!}</td>
-                <td>
-                    <div class = 'row'>
-                        <a href = '#modal1' class = 'delete btn-floating modal-trigger red' data-link = "/image/{!!$image->id!!}/deleteMsg" ><i class = 'material-icons'>delete</i></a>
-                        <a href = '#' class = 'viewEdit btn-floating blue' data-link = '/image/{!!$image->id!!}/edit'><i class = 'material-icons'>edit</i></a>
-                        <a href = '#' class = 'viewShow btn-floating orange' data-link = '/image/{!!$image->id!!}'><i class = 'material-icons'>info</i></a>
-                    </div>
-                </td>
-            </tr>
-            @endforeach 
-        </tbody>
-    </table>
-    {!! $images->render() !!}
 
-</div>
+	<br>
+
+	{!! Form::label('total users', 'Totaal aantal afbeeldingen: '. $images->count(), ['class' => 'control-label']) !!}
+	@if ($message = Session::get('success'))
+		<div class="alert alert-success">
+			<p>{{ $message }}</p>
+		</div>
+		<br>
+	@endif
+
+	<style>
+		.jg {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.jg > a, .jg::after {
+			--ratio: calc(var(--w) / var(--h));
+			--row-height: 9rem;
+			flex-basis: calc(var(--ratio) * var(--row-height));
+		}
+
+		.jg > a {
+			margin: 0.25rem;
+			flex-grow: calc(var(--ratio) * 100);
+		}
+
+		.jg::after {
+			--w: 2;
+			--h: 1;
+			content: '';
+			flex-grow: 1000000;
+		}
+
+		.jg > a > img {
+			display: block;
+			width: 100%;
+		}
+	</style>
+
+	<div class='container'>
+		<div class="jg col-12">
+			@foreach ($images as $image)
+
+				<div class="col-lg-4 col-md-4 col-sm-6">
+					<a href="{{route("images.show", $image->id)}}" style="--w: 500; --h: 500">
+						<img src="{{route("images.show", $image->id)}}" class="img-fluid" alt="Responsive image">
+					</a>
+
+					{!! Form::open(['method' => 'DELETE','route' => ['images.destroy', $image->id], 'onsubmit' => 'return ConfirmDelete()']) !!}
+					{!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+					{!! Form::close() !!}
+					<hr class="bg-primary">
+				</div>
+				<br>
+
+			@endforeach
+
+		</div>
+
+	</div>
 @endsection
